@@ -2,50 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'firebase_options.dart';
+import 'main.dart';
 import 'form.dart';
-import 'Stat.dart';
 
-var db = FirebaseFirestore.instance;
-void main() async {
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
-  runApp(const MyApp());
-  var snapshot = await db.collection('forms').get();
-  for (var doc in snapshot.docs){
-    print(doc.data());
-  }
-
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Answeralyzer',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+class StatPage extends StatefulWidget {
+  const StatPage({Key? key}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -56,14 +17,62 @@ class MyHomePage extends StatefulWidget {
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
 
-  final String title;
-
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<StatPage> createState() => _StatPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _StatPageState extends State<StatPage> {
   int _selectedPage = 0;
+  List<String> questions = ["Do you like this form","Any questions ?","Do you prefer corn or carrot ?","Pick the food you like"];
+  List<String> type =["YesNo","TextInput","Choose1","ChooseMany"];
+  List<List<String>> solution = [[""],[""],["Corn","Carrot"],["Ice Cream","Pizza","Pop Corn","Burger"]];
+  List<List<String>> answers = [["Yes","","Corn","IceCream Pizza"],["No","what's the weather right now ?","Corn","IceCream"],["Yes","no question","Corn","IceCream PopCron Burger"]];
+  List<List<int>> stats = <List<int>>[];
+  List<String> text = <String>[];
+  void Stats(){
+      for(int i=0;i<type.length;i++){
+        if(type[i]=="YesNo"){
+          stats[i]=[0,0,0];
+          for(int j=0;j<answers.length;j++){
+            if(answers[j][i]=="Yes"){
+              stats[i][1]++;
+            }else{
+              stats[i][2]++;
+            }
+          }
+        }
+        if(type[i]=="TextInput"){
+          stats[i]=[1];
+          for(int j=0;j<answers.length;j++){
+            text[j]=answers[j][i];
+          }
+        }
+        if(type[i]=="Choose1") {
+          stats[i] = [2];
+          for (int k = 1; k < solution[i].length; k++) {
+            stats[i][k] = 0;
+            for (int j = 0; j < answers.length; j++) {
+              if (answers[j][i] == solution[i][k]) {
+                stats[i][k]++;
+              }
+            }
+          }
+        }
+        if(type[i]=="ChooseMany") {
+          stats[i] = [3];
+          for (int k = 1; k < solution[i].length; k++) {
+            stats[i][k].add(0);
+            for (int j = 0; j < answers.length; j++) {
+              if (answers[j][i].contains(solution[i][k])) {
+                stats[i][k]++;
+              }
+            }
+          }
+        }
+      }
+      print(stats);
+  }
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -76,7 +85,14 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: Text("FormPage"),
+      ),
+      body: Center(
+        child: Column(
+          children: [
+            ElevatedButton(onPressed: Stats, child: Text("Print stats"))
+          ],
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
@@ -96,7 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
         currentIndex: _selectedPage,
         selectedItemColor: Colors.amber[800],
         onTap: _onItemTapped,
-      ),// This trailing comma makes auto-formatting nicer for build methods.
+      ),
     );
   }
   void _onItemTapped(int index) {
