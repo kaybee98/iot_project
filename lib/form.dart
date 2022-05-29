@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'firebase_options.dart';
 import 'main.dart';
 import 'Stat.dart';
+import 'Draw.dart';
 
 class FormPage extends StatefulWidget {
   const FormPage({Key? key}) : super(key: key);
@@ -75,7 +76,7 @@ class _FormPageState extends State<FormPage> {
   }
   void _navigateToStatPage(BuildContext context) {
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => StatPage()));
+        .push(MaterialPageRoute(builder: (context) => GraphScreen()));
   }
   void _navigateToHomePage(BuildContext context) {
     Navigator.of(context)

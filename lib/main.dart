@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'firebase_options.dart';
 import 'form.dart';
 import 'Stat.dart';
+import 'Draw.dart';
 
 var db = FirebaseFirestore.instance;
 void main() async {
@@ -110,7 +111,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
   void _navigateToStatPage(BuildContext context) {
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => StatPage()));
+        .push(MaterialPageRoute(builder: (context) => GraphScreen()));
   }
   void _navigateToHomePage(BuildContext context) {
     Navigator.of(context)

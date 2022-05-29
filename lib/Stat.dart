@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:iot_project/Draw.dart';
 import 'firebase_options.dart';
 import 'main.dart';
 import 'form.dart';
@@ -32,47 +33,47 @@ class _StatPageState extends State<StatPage> {
   List<List<int>> stats = <List<int>>[];
   List<String> text = <String>[];
   void Stats(){
-      for(int i=0;i<type.length;i++){
-        if(type[i]=="YesNo"){
-          stats[i]=[0,0,0];
-          for(int j=0;j<answers.length;j++){
-            if(answers[j][i]=="Yes"){
-              stats[i][1]++;
-            }else{
-              stats[i][2]++;
-            }
+    for(int i=0;i<type.length;i++){
+      if(type[i]=="YesNo"){
+        stats[i]=[0,0,0];
+        for(int j=0;j<answers.length;j++){
+          if(answers[j][i]=="Yes"){
+            stats[i][1]++;
+          }else{
+            stats[i][2]++;
           }
         }
-        if(type[i]=="TextInput"){
-          stats[i]=[1];
-          for(int j=0;j<answers.length;j++){
-            text[j]=answers[j][i];
-          }
+      }
+      if(type[i]=="TextInput"){
+        stats[i]=[1];
+        for(int j=0;j<answers.length;j++){
+          text[j]=answers[j][i];
         }
-        if(type[i]=="Choose1") {
-          stats[i] = [2];
-          for (int k = 1; k < solution[i].length; k++) {
-            stats[i][k] = 0;
-            for (int j = 0; j < answers.length; j++) {
-              if (answers[j][i] == solution[i][k]) {
-                stats[i][k]++;
-              }
-            }
-          }
-        }
-        if(type[i]=="ChooseMany") {
-          stats[i] = [3];
-          for (int k = 1; k < solution[i].length; k++) {
-            stats[i][k]=0;
-            for (int j = 0; j < answers.length; j++) {
-              if (answers[j][i].contains(solution[i][k])) {
-                stats[i][k]++;
-              }
+      }
+      if(type[i]=="Choose1") {
+        stats[i] = [2];
+        for (int k = 1; k < solution[i].length; k++) {
+          stats[i][k] = 0;
+          for (int j = 0; j < answers.length; j++) {
+            if (answers[j][i] == solution[i][k]) {
+              stats[i][k]++;
             }
           }
         }
       }
-      print(stats);
+      if(type[i]=="ChooseMany") {
+        stats[i] = [3];
+        for (int k = 1; k < solution[i].length; k++) {
+          stats[i][k]=0;
+          for (int j = 0; j < answers.length; j++) {
+            if (answers[j][i].contains(solution[i][k])) {
+              stats[i][k]++;
+            }
+          }
+        }
+      }
+    }
+    print(stats);
   }
   List<List<int>> teststats = [[0,5,3],[1],[2,43,25],[3,12,2,65,30]];
   @override
@@ -148,7 +149,7 @@ class _StatPageState extends State<StatPage> {
   }
   void _navigateToStatPage(BuildContext context) {
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => StatPage()));
+        .push(MaterialPageRoute(builder: (context) => GraphScreen()));
   }
   void _navigateToHomePage(BuildContext context) {
     Navigator.of(context)
