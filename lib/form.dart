@@ -22,7 +22,7 @@ class FormPage extends StatefulWidget {
 }
 
 class _FormPageState extends State<FormPage> {
-  int _selectedPage = 0;
+  int _selectedPage = 1;
   List<String> questions = ["Do you like this form","Any questions ?","Do you prefer corn or carrot ?","Pick the food you like"];
   List<String> type =["YesNo","Textinput","Choose1","ChooseMany"];
   List<String> Possibility = [];
@@ -56,7 +56,7 @@ class _FormPageState extends State<FormPage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.pie_chart, color : Colors.black),
-            label: 'Form',
+            label: 'Stat',
           ),
         ],
         currentIndex: _selectedPage,

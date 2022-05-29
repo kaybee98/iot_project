@@ -26,6 +26,18 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "charts_common",
+      "rootUri": "file:///C:/Users/Asus/Documents/flutter_windows_2.10.3-stable/flutter/.pub-cache/hosted/pub.dartlang.org/charts_common-0.12.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "charts_flutter",
+      "rootUri": "file:///C:/Users/Asus/Documents/flutter_windows_2.10.3-stable/flutter/.pub-cache/hosted/pub.dartlang.org/charts_flutter-0.12.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "clock",
       "rootUri": "file:///C:/Users/Asus/Documents/flutter_windows_2.10.3-stable/flutter/.pub-cache/hosted/pub.dartlang.org/clock-1.1.0",
       "packageUri": "lib/",
@@ -110,6 +122,18 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "graphic",
+      "rootUri": "file:///C:/Users/Asus/Documents/flutter_windows_2.10.3-stable/flutter/.pub-cache/hosted/pub.dartlang.org/graphic-0.10.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.13"
+    },
+    {
+      "name": "intl",
+      "rootUri": "file:///C:/Users/Asus/Documents/flutter_windows_2.10.3-stable/flutter/.pub-cache/hosted/pub.dartlang.org/intl-0.17.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "js",
       "rootUri": "file:///C:/Users/Asus/Documents/flutter_windows_2.10.3-stable/flutter/.pub-cache/hosted/pub.dartlang.org/js-0.6.4",
       "packageUri": "lib/",
@@ -118,6 +142,12 @@
     {
       "name": "lints",
       "rootUri": "file:///C:/Users/Asus/Documents/flutter_windows_2.10.3-stable/flutter/.pub-cache/hosted/pub.dartlang.org/lints-1.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "logging",
+      "rootUri": "file:///C:/Users/Asus/Documents/flutter_windows_2.10.3-stable/flutter/.pub-cache/hosted/pub.dartlang.org/logging-1.0.2",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -142,6 +172,18 @@
     {
       "name": "path",
       "rootUri": "file:///C:/Users/Asus/Documents/flutter_windows_2.10.3-stable/flutter/.pub-cache/hosted/pub.dartlang.org/path-1.8.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "path_drawing",
+      "rootUri": "file:///C:/Users/Asus/Documents/flutter_windows_2.10.3-stable/flutter/.pub-cache/hosted/pub.dartlang.org/path_drawing-1.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "path_parsing",
+      "rootUri": "file:///C:/Users/Asus/Documents/flutter_windows_2.10.3-stable/flutter/.pub-cache/hosted/pub.dartlang.org/path_parsing-1.0.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -206,7 +248,7 @@
       "languageVersion": "2.16"
     }
   ],
-  "generated": "2022-05-28T17:05:34.925031Z",
+  "generated": "2022-05-29T11:35:45.991779Z",
   "generator": "pub",
   "generatorVersion": "2.17.1"
 }
