@@ -26,6 +26,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Answeralyzer',
       theme: ThemeData(
         // This is the theme of your application.
@@ -90,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.pie_chart, color : Colors.black),
-            label: 'Form',
+            label: 'Stat',
           ),
         ],
         currentIndex: _selectedPage,

@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'firebase_options.dart';
 import 'main.dart';
 import 'form.dart';
+import 'package:charts_flutter/flutter.dart';
+import 'package:graphic/graphic.dart';
 
 class StatPage extends StatefulWidget {
   const StatPage({Key? key}) : super(key: key);
@@ -22,7 +24,7 @@ class StatPage extends StatefulWidget {
 }
 
 class _StatPageState extends State<StatPage> {
-  int _selectedPage = 0;
+  int _selectedPage = 2;
   List<String> questions = ["Do you like this form","Any questions ?","Do you prefer corn or carrot ?","Pick the food you like"];
   List<String> type =["YesNo","TextInput","Choose1","ChooseMany"];
   List<List<String>> solution = [[""],[""],["Corn","Carrot"],["Ice Cream","Pizza","Pop Corn","Burger"]];
@@ -61,7 +63,7 @@ class _StatPageState extends State<StatPage> {
         if(type[i]=="ChooseMany") {
           stats[i] = [3];
           for (int k = 1; k < solution[i].length; k++) {
-            stats[i][k].add(0);
+            stats[i][k]=0;
             for (int j = 0; j < answers.length; j++) {
               if (answers[j][i].contains(solution[i][k])) {
                 stats[i][k]++;
@@ -72,7 +74,7 @@ class _StatPageState extends State<StatPage> {
       }
       print(stats);
   }
-
+  List<List<int>> teststats = [[0,5,3],[1],[2,43,25],[3,12,2,65,30]];
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -90,7 +92,28 @@ class _StatPageState extends State<StatPage> {
       body: Center(
         child: Column(
           children: [
-            ElevatedButton(onPressed: Stats, child: Text("Print stats"))
+            Chart(
+              data: [
+                { 'genre': 'Sports', 'sold': 275 },
+                { 'genre': 'Strategy', 'sold': 115 },
+                { 'genre': 'Action', 'sold': 120 },
+                { 'genre': 'Shooter', 'sold': 350 },
+                { 'genre': 'Other', 'sold': 150 },
+              ],
+              variables: {
+                'genre': Variable(
+                  accessor: (Map map) => map['genre'] as String,
+                ),
+                'sold': Variable(
+                  accessor: (Map map) => map['sold'] as num,
+                ),
+              },
+              elements: [IntervalElement()],
+              axes: [
+                Defaults.horizontalAxis,
+                Defaults.verticalAxis,
+              ],
+            ),
           ],
         ),
       ),
@@ -106,7 +129,7 @@ class _StatPageState extends State<StatPage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.pie_chart, color : Colors.black),
-            label: 'Form',
+            label: 'Stat',
           ),
         ],
         currentIndex: _selectedPage,
