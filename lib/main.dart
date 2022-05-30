@@ -3,47 +3,185 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'firebase_options.dart';
 import 'listviewform.dart';
+import 'package:charts_flutter/flutter.dart';
 var db = FirebaseFirestore.instance;
 void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(
-        MaterialApp(
-          initialRoute: '/',
-          routes: {
-            '/': (context) => MyHome(),
-            '/listviewform': (context) => const Listviewform(),
-          },
-        ),
+        Answeralyzer()
       );
 
-  var snapshot = await db.collection('forms').get();
 
-  for (var doc in snapshot.docs){
-    print(doc.reference.parent);
-  }
 
 }
-
-class MyHome extends StatelessWidget {
-  const MyHome({Key? key}) : super(key: key);
-
+class Answeralyzer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('List Forms'),
-      ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.pushNamed(context, '/listviewform');
-          },
-          child: const Text('Refresh'),
-        ),
+    return MaterialApp(
+      title: 'Answeralyzer',
+      theme: ThemeData.light(),
+      home: Scaffold(
+        body:FormsListView(title: 'My forms'),
       ),
     );
   }
 }
+class FormsListView extends StatefulWidget {
+  const FormsListView({Key? key, required this.title}) : super(key: key);
+  final String title;
 
+  @override
+  State<FormsListView> createState() => _FormsListViewState();
+}
+
+class _FormsListViewState extends State<FormsListView> {
+  List<Map<String,String>> formsList =[];
+  void refreshForms() async {
+    var snapshot = await db.collection('forms').get();
+    formsList.clear();
+    for (var doc in snapshot.docs){
+      final datad = doc.data() as Map<String,dynamic>;
+      setState(() {
+        formsList.add({'title':datad['title'].toString(),'ID':doc.reference.id});
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    refreshForms();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+        actions: [
+          IconButton(onPressed: (){refreshForms();}, icon: Icon(Icons.refresh))
+        ],
+      ),
+      body: Center(
+        child: Column(
+          children: [
+            Expanded(
+                child: ListView.builder(itemCount: formsList.length,
+                    itemBuilder: (context,index){
+                    final currentForm = formsList[index];
+                      return Card(
+                        child: ListTile(title: Text(currentForm['title'].toString()),
+                          onTap: (){
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context)=>QuestionsListView(formInfo:formsList[index])));
+                          },),
+
+                      );
+                    }
+                )
+            ),
+          ],
+        ),
+      )
+    );
+  }
+}
+
+class QuestionsListView extends StatefulWidget {
+  const QuestionsListView({Key? key, required this.formInfo}) : super(key: key);
+  final Map<String,String> formInfo;
+
+  @override
+  State<QuestionsListView> createState() => _QuestionsListViewState();
+}
+
+class _QuestionsListViewState extends State<QuestionsListView> {
+  List<Map<String,dynamic>> questionsList = [];
+  void refreshQs() async {
+    final formID = widget.formInfo['ID'];
+    var snapshot = await db.collection('forms/$formID/questions').get();
+    questionsList.clear();
+    for (var doc in snapshot.docs){
+      final qTit = doc.data()['title'];
+      final qOps = doc.data()['options'] as Map<String,dynamic>;
+
+      Map<String,dynamic> currentQ = {'title':qTit,'options':qOps};
+      setState(() {
+        questionsList.add(currentQ);
+      });
+    }
+  }
+  @override
+  Widget build(BuildContext context) {
+    refreshQs();
+    return Scaffold(
+        appBar: AppBar(
+          title: Text('"${widget.formInfo['title']}" - Questions'),
+          actions: [
+            IconButton(onPressed: (){refreshQs();}, icon: Icon(Icons.refresh))
+          ],
+        ),
+        body: Center(
+          child: Column(
+            children: [
+              Expanded(
+                  child: ListView.builder(itemCount: questionsList.length,
+                      itemBuilder: (context,index){
+                        final currQ = questionsList[index];
+                        final currTitle = currQ['title'].toString();
+                        final currOpts = currQ['options'] as Map<String,dynamic>;
+                        return Card(
+                          child: ListTile(title: Text(currTitle),
+                            onTap: (){
+                              Navigator.of(context).push(MaterialPageRoute(builder:
+                                  (context)=>GraphView(qData:questionsList[index])));
+                            },),
+
+                        );
+                      }
+                  )
+              ),
+            ],
+          ),
+        )
+    );
+  }
+}
+
+class GraphView extends StatefulWidget {
+  const GraphView({Key? key, required this.qData}) : super(key: key);
+  final Map<String,dynamic> qData;
+
+  @override
+  State<GraphView> createState() => _GraphViewState();
+}
+
+class _GraphViewState extends State<GraphView> {
+  @override
+  Widget build(BuildContext context) {
+    Map<String,dynamic> optionsMap = widget.qData['options'];
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.qData['title'])
+      ),
+      body: Column(
+        children:[
+          Expanded(child: QChart(answerMap: optionsMap))
+        ]
+      )
+    );
+  }
+}
+
+class QChart extends StatefulWidget {
+  const QChart({Key? key, required this.answerMap}) : super(key: key);
+  final Map<String,dynamic> answerMap;
+  @override
+  State<QChart> createState() => _QChartState();
+}
+
+class _QChartState extends State<QChart> {
+  @override
+  Widget build(BuildContext context) {
+    print(widget.answerMap);
+    return Container(
+      child: Text(widget.answerMap.toString())
+    );
+  }
+}
