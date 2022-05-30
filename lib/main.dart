@@ -19,8 +19,9 @@ void main() async {
       );
 
   var snapshot = await db.collection('forms').get();
+
   for (var doc in snapshot.docs){
-    print(doc.data());
+    print(doc.reference.parent);
   }
 
 }
