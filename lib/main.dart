@@ -51,7 +51,7 @@ class _FormsListViewState extends State<FormsListView> {
 
   @override
   Widget build(BuildContext context) {
-    refreshForms();
+   //refreshForms();
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -109,7 +109,7 @@ class _QuestionsListViewState extends State<QuestionsListView> {
   }
   @override
   Widget build(BuildContext context) {
-    refreshQs();
+    //refreshQs();
     return Scaffold(
         appBar: AppBar(
           title: Text('"${widget.formInfo['title']}" - Questions'),
