@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'firebase_options.dart';
 import 'listviewform.dart';
-import 'package:charts_flutter/flutter.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 var db = FirebaseFirestore.instance;
 void main() async {
   await Firebase.initializeApp(
@@ -162,26 +162,63 @@ class _GraphViewState extends State<GraphView> {
       ),
       body: Column(
         children:[
-          Expanded(child: QChart(answerMap: optionsMap))
+          Expanded(child: MyChart(answerMap: optionsMap))
         ]
       )
     );
   }
 }
 
-class QChart extends StatefulWidget {
-  const QChart({Key? key, required this.answerMap}) : super(key: key);
+class MyChart extends StatelessWidget {
+  const MyChart({Key? key, required this.answerMap}) : super(key: key);
   final Map<String,dynamic> answerMap;
-  @override
-  State<QChart> createState() => _QChartState();
-}
 
-class _QChartState extends State<QChart> {
+
   @override
   Widget build(BuildContext context) {
-    print(widget.answerMap);
+
+    List<SurveyOption> qDataList = [];
+    answerMap.forEach((key, value) {
+      qDataList.add(SurveyOption(key, int.parse(value)));});
+
+    List<charts.Series<SurveyOption, String>> series = [
+      charts.Series(
+          id: "Answers",
+          data: qDataList,
+          domainFn: (SurveyOption series, _) => series.optionTitle,
+          measureFn: (SurveyOption series, _) => series.optionScore,
+          colorFn: (SurveyOption series, _) => charts.ColorUtil.fromDartColor(Colors.blue)
+      )
+    ];
     return Container(
-      child: Text(widget.answerMap.toString())
+      height: 400,
+      padding: EdgeInsets.all(20),
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                child: charts.BarChart(series, animate: true,),
+              )
+            ],
+          ),
+        ),
+      ),
     );
+  }
+}
+
+
+
+
+class SurveyOption {
+  final String optionTitle;
+  final int optionScore;
+  SurveyOption(this.optionTitle,this.optionScore);
+
+  @override
+  String toString(){
+    return '$optionTitle : $optionScore';
   }
 }
