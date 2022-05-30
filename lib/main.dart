@@ -2,123 +2,48 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'firebase_options.dart';
-import 'form.dart';
-import 'Stat.dart';
-import 'Draw.dart';
-
+import 'listviewform.dart';
 var db = FirebaseFirestore.instance;
 void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  runApp(
+        MaterialApp(
+          initialRoute: '/',
+          routes: {
+            '/': (context) => MyHome(),
+            '/listviewform': (context) => const Listviewform(),
+          },
+        ),
+      );
 
-  runApp(const MyApp());
   var snapshot = await db.collection('forms').get();
+
   for (var doc in snapshot.docs){
-    print(doc.data());
+    print(doc.reference.parent);
   }
 
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class MyHome extends StatelessWidget {
+  const MyHome({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Answeralyzer',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _selectedPage = 0;
-  @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: const Text('List Forms'),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home,color : Colors.black),
-            label: 'HomePage',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.list, color : Colors.black),
-            label: 'Form',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.pie_chart, color : Colors.black),
-            label: 'Stat',
-          ),
-        ],
-        currentIndex: _selectedPage,
-        selectedItemColor: Colors.amber[800],
-        onTap: _onItemTapped,
-      ),// This trailing comma makes auto-formatting nicer for build methods.
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.pushNamed(context, '/listviewform');
+          },
+          child: const Text('Refresh'),
+        ),
+      ),
     );
   }
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedPage = index;
-    });
-    if(index==0) _navigateToHomePage(context);
-    else if(index==1) _navigateToFormPage(context);
-    else _navigateToStatPage(context);
-  }
-  void _navigateToStatPage(BuildContext context) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => GraphScreen()));
-  }
-  void _navigateToHomePage(BuildContext context) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => MyHomePage(title: 'Home Page')));
-  }
-  void _navigateToFormPage(BuildContext context) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => FormPage()));
-  }
 }
+
